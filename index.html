@@ -598,17 +598,17 @@
           return origFetch(url, opts);
         };
       }
-      prog('Loading face detector…', 18);
-      await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-      prog('Loading landmarks model…', 52);
-      await faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL);
-      prog('Loading recognition model…', 80);
-      await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      prog('Fetching staff database…', 92);
+prog('Loading AI models in parallel…', 20);
+ await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+       faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
+       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+     ]);
+     prog('Models ready — loading staff…', 85);
       await loadDatabase();
       document.getElementById('load-banner').style.display = 'none';
     } catch(err) {
-      setStatus('❌ ' + err.message, 'red');
+      setStatus('❌ ' + err. message, 'red');
       document.getElementById('load-txt').textContent = '❌ ' + err.message;
     }
   }
